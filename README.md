@@ -8,15 +8,17 @@
 
 用法: `java -jar BuildToolsPlus.jar --rev <Minecraft版本> --compile <SPIGOT/CRAFTBUKKIT> --giteeUserName <您的Gitee用户名>`
 
+更多参数请执行 `java -jar BuildToolsPlus.jar --help` 查看。
+
 注意：在使用此包装器前，请先在您的 Gitee 账号上 Clone SpigotMC的一些 Git 仓库。
 
 方法是：
 
-		登录你的 Gitee 账号，打开 https://gitee.com/projects/import/url ，依次导入以下 4 个仓库(你将会需要打开前面那个链接4遍)：
-		https://hub.spigotmc.org/stash/scm/spigot/builddata.git
-		https://hub.spigotmc.org/stash/scm/spigot/bukkit.git
-		https://hub.spigotmc.org/stash/scm/spigot/craftbukkit.git
-		https://hub.spigotmc.org/stash/scm/spigot/spigot.git
+	登录你的 Gitee 账号，打开 https://gitee.com/projects/import/url ，依次导入以下 4 个仓库(你将会需要打开前面那个链接4遍)：
+	https://hub.spigotmc.org/stash/scm/spigot/builddata.git
+	https://hub.spigotmc.org/stash/scm/spigot/bukkit.git
+	https://hub.spigotmc.org/stash/scm/spigot/craftbukkit.git
+	https://hub.spigotmc.org/stash/scm/spigot/spigot.git
 
 **注意!** 这四个仓库一定要在拉取时设置为"开源"仓库（所有人可见）。否则在构建时会出现错误。
 
