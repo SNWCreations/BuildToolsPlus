@@ -28,7 +28,7 @@
 
 第一次使用自动化脚本前，请先安装 Python 3.8，然后运行此仓库下的 install.bat 。
 
-之后，将这两个脚本内的 username = 'XXXXX' 和 password = 'XXXXX' 替换为您的Gitee账号和密码以便操作。
+之后，将这两个脚本内的 username = 'XXXXX' 和 password = 'XXXXX' 中的 XXXXX 分别替换为您的Gitee账号和密码以便操作。
 
 您的账号和密码不会被上传，请放心使用。
 
