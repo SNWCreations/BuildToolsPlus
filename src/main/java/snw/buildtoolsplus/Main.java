@@ -276,9 +276,7 @@ public class Main {
             System.exit(1);
         } else {
             System.out.println();
-            System.out.println("成功！你的服务端已经构建。");
-            System.out.println("Spigot 服务端的命名格式: spigot-<MInecraft 版本>.jar");
-            System.out.println("CraftBukkit 服务端的命名格式: craftbukkit-<Minecraft 版本>.jar");
+            System.out.println("成功！你的服务端已经构建。文件是: " + compileTarget.value(options) + "-" + minecraftVersionResult + ".jar");
             System.out.println("感谢使用 BuildTools+ ！");
         }
     }
