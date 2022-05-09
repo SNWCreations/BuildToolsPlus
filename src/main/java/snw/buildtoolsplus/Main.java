@@ -274,6 +274,12 @@ public class Main {
             System.err.println("不同的 Minecraft 版本需要不同的 Java 来构建！这是一个可能的原因。");
             System.err.println();
             System.exit(1);
+        } else {
+            System.out.println();
+            System.out.println("成功！你的服务端已经构建。");
+            System.out.println("Spigot 服务端的命名格式: spigot-<MInecraft 版本>.jar");
+            System.out.println("CraftBukkit 服务端的命名格式: craftbukkit-<Minecraft 版本>.jar");
+            System.out.println("感谢使用 BuildTools+ ！");
         }
     }
 }
