@@ -247,7 +247,14 @@ public class Main {
 
         System.out.println("Ok. Here we go!");
         System.out.println();
-        Process buildTools = Runtime.getRuntime().exec("java -javaagent:svredirector.jar -jar BuildTools.jar --rev " + minecraftVersionResult + " --compile " + compileTarget.value(options));
+
+        final String javaLibraryPath = System.getProperty("java.library.path");
+        String jvmFolder = javaLibraryPath.substring(0, javaLibraryPath.indexOf((System.getProperty("os.name").toLowerCase().startsWith("windows") ? ';' : ':')));
+
+        Process buildTools = Runtime.getRuntime().exec(
+                "\"" + new File(jvmFolder, "java.exe").getAbsolutePath() + "\" " +
+                        "-javaagent:svredirector.jar -jar BuildTools.jar --rev " + minecraftVersionResult + " --compile " + compileTarget.value(options)
+        );
         readProcessOutput(buildTools);
         buildTools.waitFor();
         if (buildTools.exitValue() != 0) {
