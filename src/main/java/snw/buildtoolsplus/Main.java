@@ -138,27 +138,22 @@ public class Main {
 
         File mavenPackFile = new File("./apache-maven-3.6.0.zip");
 
-        if (!new File("./apache-maven-3.6.0").isDirectory()
-                && mavenPackFile.exists()
-                && Objects.requireNonNull(getFileDigest(mavenPackFile, "sha-1")).equalsIgnoreCase("51819F414A5DA3AAC855BBCA48C68AAFB95AAE81")
-        ) {
-            System.out.println("找到了有效的 Maven 压缩包！");
-        } else {
-            System.out.println("正在下载 Maven 。");
-
-            new FileDownload(
-                    redirectGithubToMirror("https://raw.githubusercontent.com/SNWCreations/spigotversions/main/apache-maven-3.6.0.zip", GITHUB_MIRROR_DATA.get(TARGETED_MIRROR_NAME).getAsString()),
-                    "./apache-maven-3.6.0.zip",
-                    "51819F414A5DA3AAC855BBCA48C68AAFB95AAE81"
-            ).start();
-        }
-
         if (!new File("./apache-maven-3.6.0").isDirectory()) {
-            System.out.println("正在解压 Maven 。");
-            zipUncompress("./apache-maven-3.6.0.zip", "./apache-maven-3.6.0");
+            if (mavenPackFile.exists()
+                    && Objects.requireNonNull(getFileDigest(mavenPackFile, "sha-1")).equalsIgnoreCase("51819F414A5DA3AAC855BBCA48C68AAFB95AAE81")) {
+                System.out.println("正在解压 Maven 。");
+                zipUncompress("./apache-maven-3.6.0.zip", "./apache-maven-3.6.0");
+            } else {
+                mavenPackFile.delete();
+                System.out.println("正在下载 Maven 。");
+
+                new FileDownload(
+                        redirectGithubToMirror("https://raw.githubusercontent.com/SNWCreations/spigotversions/main/apache-maven-3.6.0.zip", GITHUB_MIRROR_DATA.get(TARGETED_MIRROR_NAME).getAsString()),
+                        "./apache-maven-3.6.0.zip",
+                        "51819F414A5DA3AAC855BBCA48C68AAFB95AAE81"
+                ).start();
+            }
         }
-
-
 
         String gitDir = "PortableGit-2.30.0-" + ((System.getProperty("os.arch").endsWith("64") ? "64" : "32")) + "-bit";
         String gitHash = (
@@ -169,38 +164,45 @@ public class Main {
 
         File gitInstallerFile = new File("./" + gitDir, gitDir + ".7z.exe");
 
-        if (!new File("./" + gitDir, "PortableGit").isDirectory()
-                && gitInstallerFile.exists()
-                && Objects.requireNonNull(getFileDigest(gitInstallerFile, "sha-1")).equalsIgnoreCase(gitHash)) {
-            System.out.println("找到 Git 安装程序。");
-        } else {
-            System.out.println("正在下载 Git 。");
+        try {
+            Runtime.getRuntime().exec("sh -c exit");
+        } catch (Exception e) {
+            if (!new File("./" + gitDir, "PortableGit").isDirectory()) {
+                if (gitInstallerFile.exists()
+                        && Objects.requireNonNull(getFileDigest(gitInstallerFile, "sha-1")).equalsIgnoreCase(gitHash)) {
+                    System.out.println("正在安装 Git 。");
+                    Process gitProcess = Runtime.getRuntime().exec("\"" + gitInstallerFile.getAbsolutePath() + "\"" + " -y -gm2 -nr");
+                    gitProcess.waitFor();
+                    if (gitProcess.exitValue() != 0) {
+                        System.err.println("Git 安装失败！");
+                        System.exit(1);
+                    }
+                } else {
+                    System.out.println("正在下载 Git 。");
 
-            File gitDirFile = new File(gitDir);
-            if (!gitDirFile.isDirectory()) {
-                gitDirFile.mkdirs();
+                    File gitDirFile = new File(gitDir);
+                    if (!gitDirFile.isDirectory()) {
+                        gitDirFile.mkdirs();
+                    }
+
+                    new FileDownload(
+                            "https://ghproxy.com/https://github.com/git-for-windows/git/releases/download/v2.30.0.windows.1/" + gitDir + ".7z.exe",
+                            gitInstallerFile.getAbsolutePath(), gitHash
+                    ).start();
+
+                    System.out.println("正在安装 Git 。");
+                    Process gitProcess = Runtime.getRuntime().exec("\"" + gitInstallerFile.getAbsolutePath() + "\"" + " -y -gm2 -nr");
+                    gitProcess.waitFor();
+                    if (gitProcess.exitValue() != 0) {
+                        System.err.println("Git 安装失败！");
+                        System.exit(1);
+                    }
+                }
+            } else {
+                System.out.println("Git 已经安装。");
+                System.out.println();
             }
-
-            new FileDownload(
-                    "https://ghproxy.com/https://github.com/git-for-windows/git/releases/download/v2.30.0.windows.1/" + gitDir + ".7z.exe",
-                    gitInstallerFile.getAbsolutePath(), gitHash
-            ).start();
         }
-
-        if (!new File("./" + gitDir, "PortableGit").isDirectory()
-          && Runtime.getRuntime().exec("sh -c exit").exitValue() != 0) {
-            System.out.println("正在安装 Git 。");
-            Process gitProcess = Runtime.getRuntime().exec("\"" + gitInstallerFile.getAbsolutePath() + "\"" + " -y -gm2 -nr");
-            gitProcess.waitFor();
-            if (gitProcess.exitValue() != 0) {
-                System.err.println("Git 安装失败！");
-                System.exit(1);
-            }
-        } else {
-            System.out.println("Git 已经安装。");
-            System.out.println();
-        }
-
 
         System.out.println("正在检查存放构建数据的仓库。");
 
@@ -247,7 +249,7 @@ public class Main {
         }
 
         System.out.println("一切都准备好了！可以开始了吗？");
-        System.out.println("输入 'N' 退出，否则开始。");
+        System.out.println("输入 'N' 退出，输入其他值开始。");
         if (new Scanner(System.in).next().equalsIgnoreCase("n")) {
             System.out.println("感谢使用 BuildTools+ ！");
             System.out.println("自行构建的命令格式是: java -javaagent:svredirector.jar -jar BuildTools.jar --rev <Minecraft 版本> --compile <构建目标>");
