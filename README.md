@@ -6,7 +6,9 @@
 
 使用此包装器请准备 Java 环境。另外，对于不同的 Minecraft 服务端，需要不同的 Java 版本来编译。
 
-用法: `java -Dfile.encoding=utf-8 -jar BuildToolsPlus.jar --rev <Minecraft版本> --compile <SPIGOT/CRAFTBUKKIT> --giteeUserName <您的Gitee用户名>`
+用法: `java BuildToolsPlus.jar --rev <Minecraft版本> --compile <SPIGOT/CRAFTBUKKIT> --giteeUserName <您的Gitee用户名>`
+
+若有乱码，在 `java` 后面加上 ` -Dfile.encoding=gbk` 即可。
 
 更多参数请执行 `java -jar BuildToolsPlus.jar --help` 查看。
 
