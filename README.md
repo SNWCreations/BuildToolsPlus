@@ -12,7 +12,7 @@
 
 更多参数请执行 `java -jar BuildToolsPlus.jar --help` 查看。
 
-**你可以把这个当成 BuildTools 使用，提供和 BuildTools 一样的*基础*参数(似乎仅允许 `--rev`)。**
+**你可以把这个当成 BuildTools 使用，提供和 BuildTools 一样的*基础*参数(似乎仅允许 `--rev` 和 `--compile`)。**
 
 注意：在使用此包装器前，请先在您的 Gitee 账号上 Clone SpigotMC的一些 Git 仓库。
 
