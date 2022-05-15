@@ -270,8 +270,11 @@ public class Main {
                 "\"" + new File(jvmFolder, "java.exe").getAbsolutePath() + "\" " +
                         "-javaagent:svredirector.jar -jar BuildTools.jar --rev " + minecraftVersionResult + " --compile " + compileTarget.value(options)
         );
-        readProcessOutput(buildTools);
-        buildTools.waitFor();
+        try {
+            readProcessOutput(buildTools);
+        } catch (Throwable e) {
+            buildTools.destroy();
+        }
         if (buildTools.exitValue() != 0) {
             System.out.println();
             System.err.println("BuildTools 失败！我们无法做任何事情 :(");
