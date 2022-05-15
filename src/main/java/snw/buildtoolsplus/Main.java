@@ -240,11 +240,15 @@ public class Main {
 
         System.out.println();
 
-        if (!new File(CURRENT_DIR, "svredirector.jar").exists()) {
+        File svredirector = new File(CURRENT_DIR, "svredirector.jar");
+        if (!svredirector.exists() ||
+                (svredirector.exists() && (!Objects.equals(getFileDigest(svredirector, "sha-1"), "F864BAFD4DE5847A51AE3A9F1B92105CFD3EDF6A")))
+        ) {
+            svredirector.delete();
             System.out.println("正在下载 SVRedirector 。");
             new FileDownload(
-                    "https://ghproxy.com/https://github.com/SNWCreations/svredirector/releases/download/v1.1.0-FINAL/svredirector-1.1.0-FINAL-jar-with-dependencies.jar",
-                    "./svredirector.jar", null
+                    "https://ghproxy.com/https://github.com/SNWCreations/svredirector/releases/download/v2.0.0/svredirector-2.0.0.jar",
+                    "./svredirector.jar", "F864BAFD4DE5847A51AE3A9F1B92105CFD3EDF6A"
             ).start();
         }
 
