@@ -140,17 +140,14 @@ public class Util {
         }
 
         MessageDigest digest;
-        FileInputStream in;
         byte[] buffer = new byte[1024];
         int len;
 
-        try {
+        try (FileInputStream in = new FileInputStream(file)) {
             digest = MessageDigest.getInstance(algorithm);
-            in = new FileInputStream(file);
             while ((len = in.read(buffer, 0, 1024)) != -1) {
                 digest.update(buffer, 0, len);
             }
-            in.close();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
