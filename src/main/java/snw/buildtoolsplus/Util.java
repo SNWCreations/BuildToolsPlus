@@ -174,10 +174,7 @@ public class Util {
     }
 
     public static void readProcessOutput(final Process process) {
-        read(process.getInputStream());
-    }
-
-    private static void read(InputStream inputStream) {
+        InputStream inputStream = process.getInputStream();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
