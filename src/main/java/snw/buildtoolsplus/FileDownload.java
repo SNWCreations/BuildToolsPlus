@@ -35,7 +35,10 @@ public class FileDownload {
                 fs.write(buffer, 0, byteread);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("在下载文件 " + new File(localPath).getName() + " 时出现错误: " + e.getMessage(), e);
+            // we cannot do anything while an exception thrown.
+            // So we should throw a new exception and replace the error message to Chinese version
+            //  so that user can know the program is failed.
         }
 
         if (sha1 != null) { // if sha-1 is null, ignore check.
