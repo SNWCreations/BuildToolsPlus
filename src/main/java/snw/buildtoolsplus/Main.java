@@ -160,7 +160,7 @@ public class Main {
             Runtime.getRuntime().exec("git --version"); // check the Git installation.
         } catch (Exception e) {
             if (!IS_WINDOWS) {
-                System.err.println("无法找到 Bash 环境，程序无法继续。");
+                System.err.println("无法找到 Git 或 Bash 环境，程序无法继续。");
                 System.exit(1);
             }
 
