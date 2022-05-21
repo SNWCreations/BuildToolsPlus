@@ -37,6 +37,7 @@ public class Main {
         OptionParser parser = new OptionParser();
         OptionSpec<Void> help = parser.accepts("help", "显示此程序的帮助并退出");
         OptionSpec<Void> seeMirrors = parser.accepts("see-mirrors", "获取所有已知 Github 镜像的名称并退出");
+        OptionSpec<Void> startDirectly = parser.accepts("start-directly", "在准备完成后直接启动 BuildTools 。适用于全自动环境。");
         OptionSpec<String> minecraftVersion = parser.accepts("rev", "将要构建的服务端的 Minecraft 版本").withRequiredArg().defaultsTo("latest");
         OptionSpec<String> githubMirror = parser.accepts("githubMirror", "将用于构建的 Github 的镜像名称。").withOptionalArg().defaultsTo("ghproxy");
         OptionSpec<String> serverJarSource = parser.accepts("serverJarSource", "Minecraft 原版服务端的下载源。仅支持 MOJANG, MCBBS 和 BMCLAPI 。").withOptionalArg().defaultsTo("BMCLAPI");
@@ -251,15 +252,19 @@ public class Main {
             ).start();
         }
 
-        System.out.println("一切都准备好了！可以开始了吗？");
-        System.out.println("输入 'N' 退出，输入其他值开始。");
-        if (new Scanner(System.in).next().equalsIgnoreCase("n")) {
-            System.out.println("感谢使用 BuildTools+ ！");
-            System.out.println("自行构建的命令格式是: java -javaagent:svredirector.jar -jar BuildTools.jar --rev <Minecraft 版本> --compile <构建目标>");
-            return;
-        }
+        if (!options.has(startDirectly)) {
+            System.out.println("一切都准备好了！可以开始了吗？");
+            System.out.println("输入 'N' 退出，输入其他值开始。");
+            if (new Scanner(System.in).next().equalsIgnoreCase("n")) {
+                System.out.println("感谢使用 BuildTools+ ！");
+                System.out.println("自行构建的命令格式是: java -javaagent:svredirector.jar -jar BuildTools.jar --rev <Minecraft 版本> --compile <构建目标>");
+                return;
+            }
 
-        System.out.println("好的，开始吧！");
+            System.out.println("好的，开始吧！");
+        } else {
+            System.out.println("检测到 start-directly 参数。启动 BuildTools 。");
+        }
         System.out.println();
 
         final String javaLibraryPath = System.getProperty("java.library.path");
