@@ -24,18 +24,14 @@ public class FileDownload {
 
     public void start() {
         // 下载网络文件
-        int bytesum = 0;
         int byteread;
 
-        try {
+        try (FileOutputStream fs = new FileOutputStream(localPath)) {
             URLConnection conn = remoteUrl.openConnection();
             InputStream inStream = conn.getInputStream();
-            @SuppressWarnings("resource")
-            FileOutputStream fs = new FileOutputStream(localPath);
 
             byte[] buffer = new byte[1204];
             while ((byteread = inStream.read(buffer)) != -1) {
-                bytesum += byteread;
                 fs.write(buffer, 0, byteread);
             }
         } catch (IOException e) {
@@ -46,7 +42,7 @@ public class FileDownload {
             final String digest = getFileDigest(new File(localPath), "sha-1");
             assert digest != null; // impossible! unless some critical exception happen.
             if (!Objects.equals(digest.toLowerCase(), sha1.toLowerCase())) {
-                throw new RuntimeException("The SHA-1 of the requested file on local disk is not equals to provided value. Provided value: " + digest + ", Wanted value: " + sha1);
+                throw new RuntimeException("下载的文件可能损坏，实际的 SHA-1 与提供的 SHA-1 不一致。实际是: " + digest + ", 期望得到: " + sha1);
             }
         }
     }

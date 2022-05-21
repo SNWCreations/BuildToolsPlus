@@ -9,17 +9,14 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 public class Util {
-
-    private static final int BUFFER_SIZE = 2 * 1024;
 
     // standard format:
     // USER - username
@@ -55,7 +52,6 @@ public class Util {
             ZipEntry entry = (ZipEntry) entries.nextElement();
             // 如果是文件夹，就创建个文件夹
             if (entry.isDirectory()) {
-                String dirPath = destDirPath + "/" + entry.getName();
                 srcFile.mkdirs();
             } else {
                 // 如果是文件，就先创建一个文件，然后用io流把内容copy过去
@@ -169,25 +165,7 @@ public class Util {
                 .setURI(remoteUrl)
                 .setBranch("master")
                 .setDirectory(localPathFile)
-                .call();
-    }
-
-    public static void deleteDir(File dir) {
-        if (!dir.exists()) {
-            return;
-        }
-        File[] files = dir.listFiles();
-        assert files != null;
-        for (File file : files) {
-            if (file.isDirectory()) {
-                deleteDir(file);
-            } else {
-                //删除文件
-                file.delete();
-            }
-        }
-        //删除目录
-        dir.delete();
+                .call().close();
     }
 
     public static boolean notContainsGit(File file) {
@@ -198,16 +176,15 @@ public class Util {
     }
 
     public static void readProcessOutput(final Process process) {
-        read(process.getInputStream(), System.out);
-        read(process.getErrorStream(), System.err);
+        read(process.getInputStream());
     }
 
-    private static void read(InputStream inputStream, PrintStream out) {
+    private static void read(InputStream inputStream) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             while ((line = reader.readLine()) != null) {
-                out.println(line);
+                System.out.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
