@@ -101,6 +101,7 @@ public class Util {
                 JsonElement versionJson = JsonParser.parseReader(new InputStreamReader(
                         new URL(
                                 object.get("url").getAsString()
+                                        .replace("https://launchermeta.mojang.com", mainDomain) // redirect you to mirror (if you want)
                         ).openConnection().getInputStream()
                 ));
                 JsonObject serverInfo = versionJson.getAsJsonObject().get("downloads").getAsJsonObject().get("server").getAsJsonObject();
