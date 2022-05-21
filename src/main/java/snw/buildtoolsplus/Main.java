@@ -242,7 +242,7 @@ public class Main {
 
         File svredirector = new File(CURRENT_DIR, "svredirector.jar");
         if (!svredirector.exists() ||
-                (svredirector.exists() && (!Objects.equals(getFileDigest(svredirector, "sha-1"), "F864BAFD4DE5847A51AE3A9F1B92105CFD3EDF6A")))
+                (svredirector.exists() && (!Objects.requireNonNull(getFileDigest(svredirector, "sha-1")).equalsIgnoreCase("F864BAFD4DE5847A51AE3A9F1B92105CFD3EDF6A")))
         ) {
             svredirector.delete();
             System.out.println("正在下载 SVRedirector 。");
